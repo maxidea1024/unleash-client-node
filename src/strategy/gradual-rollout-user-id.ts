@@ -17,7 +17,6 @@ export default class GradualRolloutUserIdStrategy extends Strategy {
     const groupId = parameters.groupId || '';
 
     const normalizedUserId = normalizedStrategyValue(userId, groupId);
-
     return percentage > 0 && normalizedUserId <= percentage;
   }
 }

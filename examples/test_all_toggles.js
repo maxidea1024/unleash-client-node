@@ -30,7 +30,7 @@ setInterval(() => {
       return 0;
     })
     .forEach((t) => {
-      console.log(`${t.name} (${t.project}): 
+      console.log(`${t.name} (${t.project}):
     Enabled: ${isEnabled(t.name, { userId })} \t Variant: ${getVariant(t.name, { userId }).name}
     `);
     });

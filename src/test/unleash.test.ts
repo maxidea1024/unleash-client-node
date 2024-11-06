@@ -726,7 +726,7 @@ test('should use provided bootstrap data', (t) =>
       },
     });
 
-    instance.on('error', () => {});
+    instance.on('error', () => { });
 
     instance.on('ready', () => {
       t.true(instance.isEnabled('bootstrappedToggle') === true);
@@ -933,10 +933,10 @@ test('should allow custom repository', (t) =>
         getToggle: () => ({ name: 'test', enabled: true, strategies: [{ name: 'default' }] }),
         getToggles: () => [],
         getSegment: () => undefined,
-        stop: () => {},
+        stop: () => { },
         // @ts-expect-error
         start: () => {
-          setInterval(() => {}, 1000);
+          setInterval(() => { }, 1000);
         },
         // @ts-expect-error
         on: (evt, fun) => {
@@ -947,7 +947,7 @@ test('should allow custom repository', (t) =>
       },
     });
 
-    instance.on('error', () => {});
+    instance.on('error', () => { });
 
     instance.on('ready', () => {
       t.true(instance.isEnabled('test') === true);
@@ -1070,7 +1070,7 @@ test('should not allow to start twice', async (t) => {
   const url = mockNetwork();
   let repositoryStartedCount = 0;
   const mockRepository = {
-    on() {},
+    on() { },
     start() {
       repositoryStartedCount++;
     },

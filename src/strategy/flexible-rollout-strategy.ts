@@ -38,6 +38,7 @@ export default class FlexibleRolloutStrategy extends Strategy {
     if (!stickinessId) {
       return false;
     }
+
     const normalizedUserId = normalizedStrategyValue(stickinessId, groupId);
     return percentage > 0 && normalizedUserId <= percentage;
   }

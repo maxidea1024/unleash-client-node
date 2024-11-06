@@ -454,8 +454,8 @@ test('should handle invalid JSON response', (t) =>
       t.truthy(err);
       t.true(
         err.message.indexOf('Unexpected token') > -1 ||
-          err.message.indexOf('Unexpected end of JSON input') > -1 ||
-          err.message.indexOf('Unterminated string in JSON') > -1,
+        err.message.indexOf('Unexpected end of JSON input') > -1 ||
+        err.message.indexOf('Unterminated string in JSON') > -1,
       );
       resolve();
     });
@@ -859,7 +859,7 @@ test('bootstrap should override load backup-file', (t) =>
       t.is(repo.getToggle('feature-backup').enabled, false);
       resolve();
     });
-    repo.on('error', () => {});
+    repo.on('error', () => { });
     repo.start();
   }));
 
@@ -921,7 +921,7 @@ test('bootstrap should not override load backup-file', async (t) => {
     storageProvider: storeImp,
   });
 
-  repo.on('error', () => {});
+  repo.on('error', () => { });
 
   await repo.start();
 
@@ -1146,7 +1146,7 @@ test('should handle not finding a given segment id', (t) =>
       t.deepEqual(toggles![0]?.strategies![0]?.segments, [undefined]);
       resolve();
     });
-    repo.on('error', () => {});
+    repo.on('error', () => { });
     repo.start();
   }));
 
@@ -1200,7 +1200,7 @@ test('should handle not having segments to read from', (t) =>
       t.deepEqual(toggles![0]?.strategies![1]?.segments, [undefined, undefined]);
       resolve();
     });
-    repo.on('error', () => {});
+    repo.on('error', () => { });
     repo.start();
   }));
 
@@ -1301,6 +1301,6 @@ test('should return full segment data when requested', (t) =>
       );
       resolve();
     });
-    repo.on('error', () => {});
+    repo.on('error', () => { });
     repo.start();
   }));

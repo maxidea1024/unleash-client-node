@@ -24,6 +24,7 @@ export interface RepositoryInterface extends EventEmitter {
   stop(): void;
   start(): Promise<void>;
 }
+
 export interface RepositoryOptions {
   url: string;
   appName: string;
@@ -228,8 +229,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
     } catch (err: any) {
       this.emit(
         UnleashEvents.Warn,
-        `Unleash SDK was unable to load bootstrap.
-Message: ${err.message}`,
+        `Unleash SDK was unable to load bootstrap. Message: ${err.message}`,
       );
     }
   }
