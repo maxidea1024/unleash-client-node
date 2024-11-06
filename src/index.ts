@@ -17,7 +17,6 @@ let instance: undefined | Unleash;
 
 export function initialize(options: UnleashConfig): Unleash {
   instance = Unleash.getInstance(options);
-
   return instance;
 }
 
@@ -26,6 +25,7 @@ export async function startUnleash(options: UnleashConfig): Promise<Unleash> {
   if (!unleash.isSynchronized()) {
     await once(unleash, 'synchronized');
   }
+
   return unleash;
 }
 

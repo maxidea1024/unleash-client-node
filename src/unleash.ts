@@ -95,6 +95,7 @@ export class Unleash extends EventEmitter {
     if (!url) {
       throw new Error('Unleash API "url" is required');
     }
+
     if (!appName) {
       throw new Error('Unleash client "appName" is required');
     }
@@ -210,13 +211,16 @@ export class Unleash extends EventEmitter {
       customHeadersFunction: undefined,
       storageProvider: undefined,
     };
+
     const configSignature = generateHashOfConfig(cleanConfig);
     if (Unleash.instance) {
       if (configSignature !== Unleash.configSignature) {
         throw new Error('You already have an Unleash instance with a different configuration.');
       }
+
       return Unleash.instance;
     }
+
     const instance = new Unleash(config);
     Unleash.instance = instance;
     Unleash.configSignature = configSignature;
@@ -227,18 +231,21 @@ export class Unleash extends EventEmitter {
     let unleashUrl = url;
     if (unleashUrl.endsWith('/features')) {
       const oldUrl = unleashUrl;
+
       process.nextTick(() =>
         this.emit(
           UnleashEvents.Warn,
           `Unleash server URL "${oldUrl}" should no longer link directly to /features`,
         ),
       );
+
       unleashUrl = unleashUrl.replace(/\/features$/, '');
     }
 
     if (!unleashUrl.endsWith('/')) {
       unleashUrl += '/';
     }
+
     return unleashUrl;
   }
 
@@ -248,7 +255,9 @@ export class Unleash extends EventEmitter {
 
   async start(): Promise<void> {
     if (this.started) return;
+
     this.started = true;
+
     await Promise.all([this.repository.start(), this.metrics.start()]);
   }
 
@@ -266,17 +275,20 @@ export class Unleash extends EventEmitter {
     const enhancedContext = { ...this.staticContext, ...context };
     const fallbackFunc = createFallbackFunction(name, enhancedContext, fallback);
 
-    let result;
+    let result: boolean;
     if (this.ready) {
       result = this.client.isEnabled(name, enhancedContext, fallbackFunc);
     } else {
       result = fallbackFunc();
+
       this.emit(
         UnleashEvents.Warn,
         `Unleash has not been initialized yet. isEnabled(${name}) defaulted to ${result}`,
       );
     }
+
     this.count(name, result);
+
     return result;
   }
 
@@ -294,6 +306,7 @@ export class Unleash extends EventEmitter {
         typeof fallbackVariant !== 'undefined'
           ? { ...fallbackVariant, feature_enabled: false, featureEnabled: false }
           : { ...defaultVariant, featureEnabled: defaultVariant.feature_enabled! };
+
       this.emit(
         UnleashEvents.Warn,
         `Unleash has not been initialized yet. isEnabled(${name}) defaulted to ${variant}`,
@@ -319,14 +332,17 @@ export class Unleash extends EventEmitter {
         typeof fallbackVariant !== 'undefined'
           ? { ...fallbackVariant, feature_enabled: false }
           : defaultVariant;
+
       this.emit(
         UnleashEvents.Warn,
         `Unleash has not been initialized yet. isEnabled(${name}) defaulted to ${variant}`,
       );
     }
+
     if (variant.name) {
       this.countVariant(name, variant.name);
     }
+
     this.count(name, variant.feature_enabled || false);
 
     return variant;

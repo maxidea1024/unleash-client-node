@@ -42,10 +42,11 @@ export default class FileStorageProvider<T> implements StorageProvider<T> {
 
     try {
       return JSON.parse(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         error.message = `Unleash storage failed parsing file ${path}: ${error.message}`;
       }
+
       throw error;
     }
   }

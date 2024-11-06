@@ -54,9 +54,11 @@ export class DefaultBootstrapProvider implements BootstrapProvider {
         maxTimeout: 10_000,
       },
     });
+
     if (response.ok) {
       return response.json();
     }
+
     return undefined;
   }
 
@@ -69,9 +71,11 @@ export class DefaultBootstrapProvider implements BootstrapProvider {
     if (this.data) {
       return { version: 2, segments: this.segments, features: [...this.data] };
     }
+
     if (this.url) {
       return this.loadFromUrl(this.url);
     }
+
     if (this.filePath) {
       return this.loadFromFile(this.filePath);
     }

@@ -108,6 +108,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
     storageProvider,
   }: RepositoryOptions) {
     super();
+
     this.url = url;
     this.refreshInterval = refreshInterval;
     this.instanceId = instanceId;
@@ -312,7 +313,9 @@ export default class Repository extends EventEmitter implements EventEmitter {
   private handleErrorCases(url: string, statusCode: number): number {
     if (statusCode === 401 || statusCode === 403) {
       return this.configurationError(url, statusCode);
-    } else if (
+    }
+
+    if (
       statusCode === 404 ||
       statusCode === 429 ||
       statusCode === 500 ||
@@ -321,11 +324,11 @@ export default class Repository extends EventEmitter implements EventEmitter {
       statusCode === 504
     ) {
       return this.recoverableError(url, statusCode);
-    } else {
-      const error = new Error(`Response was not statusCode 2XX, but was ${statusCode}`);
-      this.emit(UnleashEvents.Error, error);
-      return this.refreshInterval;
     }
+
+    const error = new Error(`Response was not statusCode 2XX, but was ${statusCode}`);
+    this.emit(UnleashEvents.Error, error);
+    return this.refreshInterval;
   }
 
   async fetch(): Promise<void> {
@@ -372,7 +375,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
       } else {
         nextFetch = this.handleErrorCases(url, res.status);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       const e = err as { code: string };
       if (e.code === 'ECONNRESET') {
         nextFetch = Math.max(Math.floor(this.refreshInterval / 2), 1000);

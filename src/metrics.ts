@@ -122,6 +122,7 @@ export default class Metrics extends EventEmitter {
     httpOptions,
   }: MetricsOptions) {
     super();
+
     this.disabled = disableMetrics;
     this.metricsInterval = metricsInterval;
     this.metricsJitter = metricsJitter;
@@ -159,6 +160,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled || this.getInterval() === 0) {
       return;
     }
+
     this.timer = setTimeout(() => {
       this.sendMetrics();
     }, this.getInterval());
@@ -180,6 +182,7 @@ export default class Metrics extends EventEmitter {
       clearInterval(this.timer);
       delete this.timer;
     }
+
     this.disabled = true;
   }
 
@@ -187,6 +190,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return false;
     }
+
     const url = resolveUrl(suffixSlash(this.url), './client/register');
     const payload = this.getClientData();
 
@@ -208,7 +212,7 @@ export default class Metrics extends EventEmitter {
       } else {
         this.emit(UnleashEvents.Registered, payload);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       this.emit(UnleashEvents.Warn, err);
     }
     return true;
@@ -272,7 +276,7 @@ export default class Metrics extends EventEmitter {
         this.emit(UnleashEvents.Sent, payload);
         this.reduceBackoff();
       }
-    } catch (err) {
+    } catch (err: unknown) {
       this.restoreBucket(payload.bucket);
       this.emit(UnleashEvents.Warn, err);
       this.startTimer();
@@ -301,7 +305,9 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     this.increaseCounter(name, enabled, 1);
+
     this.emit(UnleashEvents.Count, name, enabled);
   }
 
@@ -309,6 +315,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     this.increaseVariantCounter(name, variantName, 1);
 
     this.emit(UnleashEvents.CountVariant, name, variantName);
@@ -318,6 +325,7 @@ export default class Metrics extends EventEmitter {
     if (inc === 0) {
       return;
     }
+
     this.assertBucket(name);
     this.bucket.toggles[name][enabled ? 'yes' : 'no'] += inc;
   }
@@ -365,6 +373,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     this.bucket.start = bucket.start;
 
     const { toggles } = bucket;

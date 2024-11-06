@@ -70,7 +70,8 @@ function getSeed(context: Context, stickiness: string = 'default'): string {
     const value = resolveContextValue(context, stickiness);
     return value ? value.toString() : randomString();
   }
-  let result;
+
+  let result: string;
   stickinessSelectors.some((key: string): boolean => {
     const value = context[key];
     if (typeof value === 'string' && value !== '') {
