@@ -51,6 +51,7 @@ export enum Operator {
 export type OperatorImpl = (constraint: Constraint, context: Context) => boolean;
 
 const cleanValues = (values: string[]) => values.filter((v) => !!v).map((v) => v.trim());
+
 const isValidSemver = (version: string) =>
   Boolean(validSemver(version)) && !version.startsWith('v');
 
@@ -80,13 +81,12 @@ const StringOperator = (constraint: Constraint, context: Context) => {
 
   if (operator === Operator.STR_STARTS_WITH) {
     return values.some((val) => contextValue?.startsWith(val));
-  }
-  if (operator === Operator.STR_ENDS_WITH) {
+  } else if (operator === Operator.STR_ENDS_WITH) {
     return values.some((val) => contextValue?.endsWith(val));
-  }
-  if (operator === Operator.STR_CONTAINS) {
+  } else if (operator === Operator.STR_CONTAINS) {
     return values.some((val) => contextValue?.includes(val));
   }
+
   return false;
 };
 
@@ -102,18 +102,18 @@ const SemverOperator = (constraint: Constraint, context: Context) => {
     if (!isValidSemver(contextValue)) {
       return false;
     }
+
     if (operator === Operator.SEMVER_EQ) {
       return semverEq(contextValue, value);
-    }
-    if (operator === Operator.SEMVER_LT) {
+    } else if (operator === Operator.SEMVER_LT) {
       return semverLt(contextValue, value);
-    }
-    if (operator === Operator.SEMVER_GT) {
+    } else if (operator === Operator.SEMVER_GT) {
       return semverGt(contextValue, value);
     }
-  } catch (e) {
+  } catch (e: unknown) {
     return false;
   }
+
   return false;
 };
 
@@ -128,6 +128,7 @@ const DateOperator = (constraint: Constraint, context: Context) => {
   if (operator === Operator.DATE_BEFORE) {
     return currentTime < value;
   }
+
   return false;
 };
 
@@ -143,19 +144,16 @@ const NumberOperator = (constraint: Constraint, context: Context) => {
 
   if (operator === Operator.NUM_EQ) {
     return contextValue === value;
-  }
-  if (operator === Operator.NUM_GT) {
+  } else if (operator === Operator.NUM_GT) {
     return contextValue > value;
-  }
-  if (operator === Operator.NUM_GTE) {
+  } else if (operator === Operator.NUM_GTE) {
     return contextValue >= value;
-  }
-  if (operator === Operator.NUM_LT) {
+  } else if (operator === Operator.NUM_LT) {
     return contextValue < value;
-  }
-  if (operator === Operator.NUM_LTE) {
+  } else if (operator === Operator.NUM_LTE) {
     return contextValue <= value;
   }
+
   return false;
 };
 
@@ -206,12 +204,14 @@ export class Strategy {
     if (!constraints) {
       return true;
     }
+
     // eslint-disable-next-line no-restricted-syntax
     for (const constraint of constraints) {
       if (!constraint || !this.checkConstraint(constraint, context)) {
         return false;
       }
     }
+
     return true;
   }
 
@@ -244,15 +244,16 @@ export class Strategy {
         variants,
         context,
       );
+
       return variantDefinition
         ? {
+          enabled: true,
+          variant: {
+            name: variantDefinition.name,
             enabled: true,
-            variant: {
-              name: variantDefinition.name,
-              enabled: true,
-              payload: variantDefinition.payload,
-            },
-          }
+            payload: variantDefinition.payload,
+          },
+        }
         : { enabled: true };
     }
 

@@ -45,6 +45,7 @@ export default class FileStorageProvider<T> implements StorageProvider<T> {
       if (error instanceof Error) {
         error.message = `Unleash storage failed parsing file ${path}: ${error.message}`;
       }
+
       throw error;
     }
   }

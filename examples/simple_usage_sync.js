@@ -24,5 +24,6 @@ unleash.on('synchronized', () => {
     const v = unleash.isEnabled(toggleName, unleashContext);
     console.log(v);
   }
+
   unleash.destroyWithFlush();
 });

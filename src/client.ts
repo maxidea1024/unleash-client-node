@@ -28,6 +28,7 @@ export default class UnleashClient extends EventEmitter {
 
   constructor(repository: RepositoryInterface, strategies: Strategy[]) {
     super();
+
     this.repository = repository;
     this.strategies = strategies || [];
     this.warnedStrategies = {};
@@ -56,6 +57,7 @@ export default class UnleashClient extends EventEmitter {
   ) {
     if (!this.warnedStrategies[missingStrategy + name]) {
       this.warnedStrategies[missingStrategy + name] = true;
+
       this.emit(
         UnleashEvents.Warn,
         `Missing strategy "${missingStrategy}" for toggle "${name}". Ensure that "${strategies
@@ -68,6 +70,7 @@ export default class UnleashClient extends EventEmitter {
   warnDependencyOnce(missingDependency: string, name: string) {
     if (!this.warnedDependencies[missingDependency + name]) {
       this.warnedDependencies[missingDependency + name] = true;
+
       this.emit(
         UnleashEvents.Warn,
         `Missing dependency "${missingDependency}" for toggle "${name}"`,
@@ -87,6 +90,7 @@ export default class UnleashClient extends EventEmitter {
         this.warnDependencyOnce(parent.feature, feature.name);
         return false;
       }
+
       if (parentToggle.dependencies?.length) {
         return false;
       }
@@ -99,6 +103,7 @@ export default class UnleashClient extends EventEmitter {
           );
           return featureEnabled && parent.variants.includes(name);
         }
+
         return this.isEnabled(parent.feature, context, () => false);
       }
 
@@ -156,6 +161,7 @@ export default class UnleashClient extends EventEmitter {
         this.warnStrategyOnce(strategySelector.name, feature.name, feature.strategies || []);
         return false;
       }
+
       const constraints = this.yieldConstraintsFor(strategySelector);
       const result = strategy.getResult(
         strategySelector.parameters,
@@ -168,6 +174,7 @@ export default class UnleashClient extends EventEmitter {
         strategyResult = result;
         return true;
       }
+
       return false;
     });
 
@@ -180,10 +187,12 @@ export default class UnleashClient extends EventEmitter {
     if (strategy.constraints) {
       yield* strategy.constraints;
     }
+
     const segments = strategy.segments?.map((segmentId) => this.repository.getSegment(segmentId));
     if (!segments) {
       return;
     }
+
     yield* this.yieldSegmentConstraints(segments);
   }
 
@@ -218,6 +227,7 @@ export default class UnleashClient extends EventEmitter {
         }),
       );
     }
+
     return variant;
   }
 

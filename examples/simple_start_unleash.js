@@ -5,6 +5,7 @@ const main = async () => {
     appName: 'async-unleash',
     url: 'http://unleash.herokuapp.com/api/',
   });
+
   const enabled = unleash.isEnabled('Demo');
   console.log(`Demo is ${enabled}`);
 };

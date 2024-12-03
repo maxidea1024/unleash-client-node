@@ -19,17 +19,6 @@ export default class FlexibleRolloutStrategy extends Strategy {
     }
   }
 
-  resolveStickiness(stickiness: string, context: Context): any {
-    switch (stickiness) {
-      case STICKINESS.default:
-        return context.userId || context.sessionId || this.randomGenerator();
-      case STICKINESS.random:
-        return this.randomGenerator();
-      default:
-        return resolveContextValue(context, stickiness);
-    }
-  }
-
   isEnabled(parameters: any, context: Context) {
     const groupId = parameters.groupId || context.featureToggle || '';
     const percentage = Number(parameters.rollout);
@@ -42,5 +31,16 @@ export default class FlexibleRolloutStrategy extends Strategy {
 
     const normalizedUserId = normalizedStrategyValue(stickinessId, groupId);
     return percentage > 0 && normalizedUserId <= percentage;
+  }
+
+  private resolveStickiness(stickiness: string, context: Context): string {
+    switch (stickiness) {
+      case STICKINESS.default:
+        return context.userId || context.sessionId || this.randomGenerator();
+      case STICKINESS.random:
+        return this.randomGenerator();
+      default:
+        return resolveContextValue(context, stickiness);
+    }
   }
 }

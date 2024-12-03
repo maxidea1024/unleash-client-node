@@ -35,7 +35,7 @@ export function generateInstanceId(instanceId?: string): string {
   let info;
   try {
     info = userInfo();
-  } catch (e) {
+  } catch (e: unknown) {
     // unable to read info;
   }
 

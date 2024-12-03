@@ -23,10 +23,10 @@ const client = initialize({
   refreshInterval: 2000,
   bootstrap: {
     // data,
-   url: 'http://localhost:3000/proxy/client/features',
+    url: 'http://localhost:3000/proxy/client/features',
     urlHeaders: {
-    Authorization: 'bootstrap',
-   }
+      Authorization: 'bootstrap',
+    }
   },
 });
 
@@ -36,12 +36,11 @@ client.on('synchronized', () => {
 });
 client.on('ready', () => console.log('ready'));
 
-
 setInterval(() => {
   const enabled = client.isEnabled('BootstrapDemo');
   console.log(
-    `BootstrapDemo: `, 
-    `${enabled ? '\x1b[32m' : '\x1b[31m'}`,`${enabled}`,
+    `BootstrapDemo: `,
+    `${enabled ? '\x1b[32m' : '\x1b[31m'}`, `${enabled}`,
     '\x1b[0m',
   );
 }, 100)

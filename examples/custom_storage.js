@@ -9,14 +9,14 @@ class MyRedisStore {
     const client = createClient();
     await client.connect();
     await client.set(key, JSON.stringify(data));
-
   }
+
   async get(key) {
     const client = createClient();
     await client.connect();
     const data = await client.get(key);
     return JSON.parse(data);
-  } 
+  }
 }
 
 const client = initialize({
@@ -35,19 +35,18 @@ client.on('synchronized', () => {
   console.log('synchronized')
   const enabled = client.isEnabled('BootstrapDemo');
   console.log(
-    `BootstrapDemo: `, 
-    `${enabled ? '\x1b[32m' : '\x1b[31m'}`,`${enabled}`,
+    `BootstrapDemo: `,
+    `${enabled ? '\x1b[32m' : '\x1b[31m'}`, `${enabled}`,
     '\x1b[0m',
   );
 });
 client.on('ready', () => console.log('ready'));
 
-
 setInterval(() => {
   const enabled = client.isEnabled('BootstrapDemo');
   console.log(
-    `BootstrapDemo: `, 
-    `${enabled ? '\x1b[32m' : '\x1b[31m'}`,`${enabled}`,
+    `BootstrapDemo: `,
+    `${enabled ? '\x1b[32m' : '\x1b[31m'}`, `${enabled}`,
     '\x1b[0m',
   );
 }, 100)

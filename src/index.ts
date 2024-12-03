@@ -17,7 +17,6 @@ let instance: undefined | Unleash;
 
 export function initialize(options: UnleashConfig): Unleash {
   instance = Unleash.getInstance(options);
-
   return instance;
 }
 

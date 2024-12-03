@@ -6,6 +6,7 @@ export default class ApplicationHostnameStrategy extends Strategy {
 
   constructor() {
     super('applicationHostname');
+
     this.hostname = (process.env.HOSTNAME || hostname() || 'undefined').toLowerCase();
   }
 

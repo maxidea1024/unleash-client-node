@@ -34,16 +34,16 @@ interface Bucket {
 
 declare var Bun:
   | {
-      version: string;
-    }
+    version: string;
+  }
   | undefined;
 
 declare var Deno:
   | {
-      version: {
-        deno: string;
-      };
-    }
+    version: {
+      deno: string;
+    };
+  }
   | undefined;
 
 type PlatformName = 'bun' | 'deno' | 'node' | 'unknown';
@@ -122,6 +122,7 @@ export default class Metrics extends EventEmitter {
     httpOptions,
   }: MetricsOptions) {
     super();
+
     this.disabled = disableMetrics;
     this.metricsInterval = metricsInterval;
     this.metricsJitter = metricsJitter;
@@ -211,7 +212,7 @@ export default class Metrics extends EventEmitter {
       } else {
         this.emit(UnleashEvents.Registered, payload);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       this.emit(UnleashEvents.Warn, err);
     }
 
@@ -278,7 +279,7 @@ export default class Metrics extends EventEmitter {
         this.emit(UnleashEvents.Sent, payload);
         this.reduceBackoff();
       }
-    } catch (err) {
+    } catch (err: unknown) {
       this.restoreBucket(payload.bucket);
       this.emit(UnleashEvents.Warn, err);
       this.startTimer();
@@ -310,6 +311,7 @@ export default class Metrics extends EventEmitter {
     }
 
     this.increaseCounter(name, enabled, 1);
+
     this.emit(UnleashEvents.Count, name, enabled);
   }
 
@@ -376,6 +378,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     this.bucket.start = bucket.start;
 
     const { toggles } = bucket;

@@ -16,6 +16,7 @@ export enum UnleashEvents {
 }
 
 export interface ImpressionEvent {
+  // TODO: isFeatureEnabled, getFeatureVariant
   eventType: 'isEnabled' | 'getVariant';
   context: Context;
   enabled: boolean;
@@ -24,6 +25,6 @@ export interface ImpressionEvent {
 }
 
 // Wrapper to provide type checking.
-export function createImpressionEvent(evt: ImpressionEvent): ImpressionEvent {
-  return evt;
+export function createImpressionEvent(event: ImpressionEvent): ImpressionEvent {
+  return event;
 }
