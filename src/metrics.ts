@@ -34,16 +34,16 @@ interface Bucket {
 
 declare var Bun:
   | {
-    version: string;
-  }
+      version: string;
+    }
   | undefined;
 
 declare var Deno:
   | {
-    version: {
-      deno: string;
-    };
-  }
+      version: {
+        deno: string;
+      };
+    }
   | undefined;
 
 type PlatformName = 'bun' | 'deno' | 'node' | 'unknown';

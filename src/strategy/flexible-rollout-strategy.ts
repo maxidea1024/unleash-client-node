@@ -40,7 +40,7 @@ export default class FlexibleRolloutStrategy extends Strategy {
       case STICKINESS.random:
         return this.randomGenerator();
       default:
-        return resolveContextValue(context, stickiness);
+        return resolveContextValue(context, stickiness) || ''; // TODO: resolve에 실패했을때는 어떻게 처리하는게 바람직할까?
     }
   }
 }

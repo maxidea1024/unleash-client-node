@@ -1,7 +1,7 @@
 import { gt as semverGt, lt as semverLt, eq as semverEq, valid as validSemver } from 'semver';
-import { Context } from '../context';
+import type { Context } from '../context';
 import { resolveContextValue } from '../helpers';
-import { selectVariantDefinition, Variant, VariantDefinition } from '../variant';
+import { selectVariantDefinition, type Variant, type VariantDefinition } from '../variant';
 
 export interface StrategyTransportInterface {
   name: string;
@@ -247,13 +247,13 @@ export class Strategy {
 
       return variantDefinition
         ? {
-          enabled: true,
-          variant: {
-            name: variantDefinition.name,
             enabled: true,
-            payload: variantDefinition.payload,
-          },
-        }
+            variant: {
+              name: variantDefinition.name,
+              enabled: true,
+              payload: variantDefinition.payload,
+            },
+          }
         : { enabled: true };
     }
 

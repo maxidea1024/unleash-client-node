@@ -37,7 +37,7 @@ test('invalid strategy should throw', (t) => {
       new Client(repo, [
         {
           name: 'valid',
-          isEnabled: () => { },
+          isEnabled: () => {},
         },
         null,
       ]),
