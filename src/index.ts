@@ -26,6 +26,7 @@ export async function startUnleash(options: UnleashConfig): Promise<Unleash> {
   if (!unleash.isSynchronized()) {
     await once(unleash, 'synchronized');
   }
+
   return unleash;
 }
 
@@ -36,8 +37,8 @@ export function isEnabled(name: string, context: Context = {}, fallbackValue?: b
 export function destroy() {
   if (instance) {
     instance.destroy();
+    instance = undefined;
   }
-  instance = undefined;
 }
 
 export function getFeatureToggleDefinition(toggleName: string) {

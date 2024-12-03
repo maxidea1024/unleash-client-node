@@ -88,7 +88,7 @@ export default class Metrics extends EventEmitter {
 
   private metricsJitter: number;
 
-  private failures: number = 0;
+  private failures = 0;
 
   private disabled: boolean;
 
@@ -150,15 +150,16 @@ export default class Metrics extends EventEmitter {
   getInterval(): number {
     if (this.metricsInterval === 0) {
       return 0;
-    } else {
-      return this.metricsInterval + this.failures * this.metricsInterval + this.getAppliedJitter();
     }
+
+    return this.metricsInterval + this.failures * this.metricsInterval + this.getAppliedJitter();
   }
 
   private startTimer(): void {
     if (this.disabled || this.getInterval() === 0) {
       return;
     }
+
     this.timer = setTimeout(() => {
       this.sendMetrics();
     }, this.getInterval());
@@ -178,8 +179,9 @@ export default class Metrics extends EventEmitter {
   stop(): void {
     if (this.timer) {
       clearInterval(this.timer);
-      delete this.timer;
+      this.timer = undefined;
     }
+
     this.disabled = true;
   }
 
@@ -187,6 +189,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return false;
     }
+
     const url = resolveUrl(suffixSlash(this.url), './client/register');
     const payload = this.getClientData();
 
@@ -211,6 +214,7 @@ export default class Metrics extends EventEmitter {
     } catch (err) {
       this.emit(UnleashEvents.Warn, err);
     }
+
     return true;
   }
 
@@ -234,11 +238,13 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     if (this.bucketIsEmpty()) {
       this.resetBucket();
       this.startTimer();
       return;
     }
+
     const url = resolveUrl(suffixSlash(this.url), './client/metrics');
     const payload = this.createMetricsData();
 
@@ -255,7 +261,7 @@ export default class Metrics extends EventEmitter {
         httpOptions: this.httpOptions,
       });
       if (!res.ok) {
-        if (res.status === 403 || res.status == 401) {
+        if (res.status === 403 || res.status === 401) {
           this.configurationError(url, res.status);
         } else if (
           res.status === 404 ||
@@ -288,6 +294,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     if (!this.bucket.toggles[name]) {
       this.bucket.toggles[name] = {
         yes: 0,
@@ -301,6 +308,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     this.increaseCounter(name, enabled, 1);
     this.emit(UnleashEvents.Count, name, enabled);
   }
@@ -309,6 +317,7 @@ export default class Metrics extends EventEmitter {
     if (this.disabled) {
       return;
     }
+
     this.increaseVariantCounter(name, variantName, 1);
 
     this.emit(UnleashEvents.CountVariant, name, variantName);
@@ -318,12 +327,14 @@ export default class Metrics extends EventEmitter {
     if (inc === 0) {
       return;
     }
+
     this.assertBucket(name);
     this.bucket.toggles[name][enabled ? 'yes' : 'no'] += inc;
   }
 
   private increaseVariantCounter(name: string, variantName: string, inc = 1): void {
     this.assertBucket(name);
+
     if (this.bucket.toggles[name].variants[variantName]) {
       this.bucket.toggles[name].variants[variantName] += inc;
     } else {

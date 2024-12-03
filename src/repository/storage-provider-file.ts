@@ -31,9 +31,8 @@ export default class FileStorageProvider<T> implements StorageProvider<T> {
     } catch (error: any) {
       if (error.code !== 'ENOENT') {
         throw error;
-      } else {
-        return undefined;
       }
+      return undefined;
     }
 
     if (!data || data.trim().length === 0) {
@@ -42,7 +41,7 @@ export default class FileStorageProvider<T> implements StorageProvider<T> {
 
     try {
       return JSON.parse(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         error.message = `Unleash storage failed parsing file ${path}: ${error.message}`;
       }

@@ -24,6 +24,7 @@ export interface RepositoryInterface extends EventEmitter {
   stop(): void;
   start(): Promise<void>;
 }
+
 export interface RepositoryOptions {
   url: string;
   appName: string;

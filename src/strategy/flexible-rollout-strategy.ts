@@ -13,6 +13,7 @@ export default class FlexibleRolloutStrategy extends Strategy {
 
   constructor(randomGenerator?: Function) {
     super('flexibleRollout');
+
     if (randomGenerator) {
       this.randomGenerator = randomGenerator;
     }
@@ -38,6 +39,7 @@ export default class FlexibleRolloutStrategy extends Strategy {
     if (!stickinessId) {
       return false;
     }
+
     const normalizedUserId = normalizedStrategyValue(stickinessId, groupId);
     return percentage > 0 && normalizedUserId <= percentage;
   }
