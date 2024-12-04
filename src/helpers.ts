@@ -1,6 +1,6 @@
 import { userInfo, hostname } from 'os';
 import * as murmurHash3 from 'murmurhash3js';
-import { Context } from './context';
+import type { Context } from './context';
 
 export type FallbackFunction = (name: string, context: Context) => boolean;
 

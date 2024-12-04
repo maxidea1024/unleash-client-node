@@ -1,16 +1,16 @@
 import { EventEmitter } from 'events';
-import { Strategy, StrategyTransportInterface } from './strategy';
-import { FeatureInterface } from './feature';
-import { RepositoryInterface } from './repository';
+import type { Strategy, StrategyTransportInterface } from './strategy';
+import type { FeatureInterface } from './feature';
+import type { RepositoryInterface } from './repository';
 import {
-  Variant,
-  VariantDefinition,
-  VariantWithFeatureStatus,
+  type Variant,
+  type VariantDefinition,
+  type VariantWithFeatureStatus,
   defaultVariant,
   selectVariant,
 } from './variant';
-import { Context } from './context';
-import { Constraint, Segment, StrategyResult } from './strategy/strategy';
+import type { Context } from './context';
+import type { Constraint, Segment, StrategyResult } from './strategy/strategy';
 import { createImpressionEvent, UnleashEvents } from './events';
 
 interface BooleanMap {
@@ -18,13 +18,10 @@ interface BooleanMap {
 }
 
 export default class UnleashClient extends EventEmitter {
-  private repository: RepositoryInterface;
-
-  private strategies: Strategy[];
-
-  private warnedStrategies: BooleanMap;
-
-  private warnedDependencies: BooleanMap;
+  private readonly repository: RepositoryInterface;
+  private readonly strategies: Strategy[];
+  private readonly warnedStrategies: BooleanMap;
+  private readonly warnedDependencies: BooleanMap;
 
   constructor(repository: RepositoryInterface, strategies: Strategy[]) {
     super();
@@ -55,8 +52,9 @@ export default class UnleashClient extends EventEmitter {
     name: string,
     strategies: StrategyTransportInterface[],
   ) {
-    if (!this.warnedStrategies[missingStrategy + name]) {
-      this.warnedStrategies[missingStrategy + name] = true;
+    const key = missingStrategy + name;
+    if (!this.warnedStrategies[key]) {
+      this.warnedStrategies[key] = true;
 
       this.emit(
         UnleashEvents.Warn,
@@ -68,8 +66,9 @@ export default class UnleashClient extends EventEmitter {
   }
 
   warnDependencyOnce(missingDependency: string, name: string) {
-    if (!this.warnedDependencies[missingDependency + name]) {
-      this.warnedDependencies[missingDependency + name] = true;
+    const key = missingDependency + name;
+    if (!this.warnedDependencies[key]) {
+      this.warnedDependencies[key] = true;
 
       this.emit(
         UnleashEvents.Warn,
