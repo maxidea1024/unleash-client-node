@@ -1,6 +1,5 @@
-import { Context } from './context';
-// eslint-disable-next-line import/no-cycle
-import { FeatureInterface } from './feature';
+import type { Context } from './context';
+import type { FeatureInterface } from './feature';
 import { normalizedVariantValue } from './strategy/util';
 import { resolveContextValue } from './helpers';
 
@@ -71,7 +70,7 @@ function getSeed(context: Context, stickiness: string = 'default'): string {
     return value ? value.toString() : randomString();
   }
 
-  let result: string;
+  let result: string | undefined;
   stickinessSelectors.some((key: string): boolean => {
     const value = context[key];
     if (typeof value === 'string' && value !== '') {

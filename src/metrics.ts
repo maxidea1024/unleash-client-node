@@ -34,16 +34,16 @@ interface Bucket {
 
 declare var Bun:
   | {
-      version: string;
-    }
+    version: string;
+  }
   | undefined;
 
 declare var Deno:
   | {
-      version: {
-        deno: string;
-      };
-    }
+    version: {
+      deno: string;
+    };
+  }
   | undefined;
 
 type PlatformName = 'bun' | 'deno' | 'node' | 'unknown';
@@ -94,7 +94,7 @@ export default class Metrics extends EventEmitter {
 
   private url: string;
 
-  private timer: NodeJS.Timer | undefined;
+  private timer: NodeJS.Timeout | undefined;
 
   private started: Date;
 
@@ -382,6 +382,7 @@ export default class Metrics extends EventEmitter {
     this.bucket.start = bucket.start;
 
     const { toggles } = bucket;
+    // FIXME:
     Object.keys(toggles).forEach((toggleName) => {
       const toggle = toggles[toggleName];
       this.increaseCounter(toggleName, true, toggle.yes);
@@ -409,6 +410,7 @@ export default class Metrics extends EventEmitter {
   }
 
   private getPlatformData(): PlatformData {
+    // FIXME:
     if (typeof Bun !== 'undefined') {
       return { name: 'bun', version: Bun.version };
     } else if (typeof Deno !== 'undefined') {

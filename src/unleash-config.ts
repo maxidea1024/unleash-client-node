@@ -1,12 +1,12 @@
-import { CustomHeaders, CustomHeadersFunction } from './headers';
-import { Strategy } from './strategy';
+import type { CustomHeaders, CustomHeadersFunction } from './headers';
+import type { Strategy } from './strategy';
 
-import { ClientFeaturesResponse } from './feature';
-import { HttpOptions } from './http-options';
-import { TagFilter } from './tags';
-import { BootstrapOptions } from './repository/bootstrap-provider';
-import { StorageProvider } from './repository/storage-provider';
-import { RepositoryInterface } from './repository';
+import type { ClientFeaturesResponse } from './feature';
+import type { HttpOptions } from './http-options';
+import type { TagFilter } from './tags';
+import type { BootstrapOptions } from './repository/bootstrap-provider';
+import type { StorageProvider } from './repository/storage-provider';
+import type { RepositoryInterface } from './repository';
 
 export interface UnleashConfig {
   appName: string;

@@ -1,21 +1,21 @@
 import { tmpdir } from 'os';
 import { EventEmitter } from 'events';
 import Client from './client';
-import Repository, { RepositoryInterface } from './repository';
+import Repository, { type RepositoryInterface } from './repository';
 import Metrics from './metrics';
-import { Context } from './context';
+import type { Context } from './context';
 import { Strategy, defaultStrategies } from './strategy';
 
-import { EnhancedFeatureInterface, FeatureInterface } from './feature';
-import { Variant, defaultVariant, VariantWithFeatureStatus } from './variant';
+import type { EnhancedFeatureInterface, FeatureInterface } from './feature';
+import { type Variant, defaultVariant, type VariantWithFeatureStatus } from './variant';
 import {
-  FallbackFunction,
+  type FallbackFunction,
   createFallbackFunction,
   generateInstanceId,
   generateHashOfConfig,
 } from './helpers';
 import { resolveBootstrapProvider } from './repository/bootstrap-provider';
-import { ImpressionEvent, UnleashEvents } from './events';
+import { type ImpressionEvent, UnleashEvents } from './events';
 import { UnleashConfig } from './unleash-config';
 import FileStorageProvider from './repository/storage-provider-file';
 
