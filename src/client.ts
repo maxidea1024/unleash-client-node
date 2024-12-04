@@ -19,8 +19,11 @@ interface BooleanMap {
 
 export default class UnleashClient extends EventEmitter {
   private readonly repository: RepositoryInterface;
+
   private readonly strategies: Strategy[];
+
   private readonly warnedStrategies: BooleanMap;
+
   private readonly warnedDependencies: BooleanMap;
 
   constructor(repository: RepositoryInterface, strategies: Strategy[]) {

@@ -1,8 +1,8 @@
 import { EventEmitter } from 'events';
 import { post } from './request';
-import { CustomHeaders, CustomHeadersFunction } from './headers';
+import type { CustomHeaders, CustomHeadersFunction } from './headers';
 import { sdkVersion } from './details.json';
-import { HttpOptions } from './http-options';
+import type { HttpOptions } from './http-options';
 import { suffixSlash, resolveUrl } from './url-utils';
 import { UnleashEvents } from './events';
 import { getAppliedJitter } from './helpers';
@@ -32,18 +32,20 @@ interface Bucket {
   toggles: { [s: string]: { yes: number; no: number; variants: VariantBucket } };
 }
 
+// biome-ignore lint/style/noVar: <explanation>
 declare var Bun:
   | {
-    version: string;
-  }
+      version: string;
+    }
   | undefined;
 
+// biome-ignore lint/style/noVar: <explanation>
 declare var Deno:
   | {
-    version: {
-      deno: string;
-    };
-  }
+      version: {
+        deno: string;
+      };
+    }
   | undefined;
 
 type PlatformName = 'bun' | 'deno' | 'node' | 'unknown';
@@ -382,16 +384,16 @@ export default class Metrics extends EventEmitter {
     this.bucket.start = bucket.start;
 
     const { toggles } = bucket;
-    // FIXME:
-    Object.keys(toggles).forEach((toggleName) => {
+
+    for (const toggleName in toggles) {
       const toggle = toggles[toggleName];
       this.increaseCounter(toggleName, true, toggle.yes);
       this.increaseCounter(toggleName, false, toggle.no);
 
-      Object.keys(toggle.variants).forEach((variant) => {
+      for (const variant in toggle.variants) {
         this.increaseVariantCounter(toggleName, variant, toggle.variants[variant]);
-      });
-    });
+      }
+    }
   }
 
   getClientData(): RegistrationData {
@@ -410,15 +412,18 @@ export default class Metrics extends EventEmitter {
   }
 
   private getPlatformData(): PlatformData {
-    // FIXME:
     if (typeof Bun !== 'undefined') {
       return { name: 'bun', version: Bun.version };
-    } else if (typeof Deno !== 'undefined') {
-      return { name: 'deno', version: Deno.version.deno };
-    } else if (typeof process !== 'undefined' && process.versions && process.versions.node) {
-      return { name: 'node', version: process.versions.node };
-    } else {
-      return { name: 'unknown', version: 'unknown' };
     }
+
+    if (typeof Deno !== 'undefined') {
+      return { name: 'deno', version: Deno.version.deno };
+    }
+
+    if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+      return { name: 'node', version: process.versions.node };
+    }
+
+    return { name: 'unknown', version: 'unknown' };
   }
 }

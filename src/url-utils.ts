@@ -23,7 +23,9 @@ const getUrl = (
     params.append('namePrefix', namePrefix);
   }
   if (tags) {
-    tags.forEach((tag) => params.append('tag', tag));
+    for (const tag of tags) {
+      params.append('tag', tag);
+    }
   }
   if (params.toString().length > 0) {
     return `${url}?${params.toString()}`;

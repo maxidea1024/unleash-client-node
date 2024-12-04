@@ -4,16 +4,16 @@ import { Variant, defaultVariant, PayloadType } from './variant';
 import { Context } from './context';
 import { TagFilter } from './tags';
 import { UnleashEvents } from './events';
-import { ClientFeaturesResponse } from './feature';
+import type { ClientFeaturesResponse, EnhancedFeatureInterface, FeatureInterface } from './feature';
 import InMemStorageProvider from './repository/storage-provider-in-mem';
-import { UnleashConfig } from './unleash-config';
+import type { UnleashConfig } from './unleash-config';
 
 // exports
 export { Strategy } from './strategy/index';
 export { Context, Variant, PayloadType, Unleash, TagFilter, InMemStorageProvider, UnleashEvents };
 export type { ClientFeaturesResponse, UnleashConfig };
 
-let instance: undefined | Unleash;
+let instance: Unleash | undefined;
 
 export function initialize(options: UnleashConfig): Unleash {
   instance = Unleash.getInstance(options);
@@ -40,12 +40,14 @@ export function destroy() {
   }
 }
 
-export function getFeatureToggleDefinition(toggleName: string) {
-  return instance && instance.getFeatureToggleDefinition(toggleName);
+export function getFeatureToggleDefinition(toggleName: string): FeatureInterface | undefined {
+  return instance?.getFeatureToggleDefinition(toggleName);
 }
 
-export function getFeatureToggleDefinitions(withFullSegments: boolean = false) {
-  return instance && instance.getFeatureToggleDefinitions(withFullSegments as any);
+export function getFeatureToggleDefinitions(
+  withFullSegments: boolean = false,
+): EnhancedFeatureInterface[] {
+  return instance?.getFeatureToggleDefinitions(withFullSegments as any) || [];
 }
 
 export function getVariant(
@@ -67,17 +69,17 @@ export function forceGetVariant(
 }
 
 export function count(toggleName: string, enabled: boolean) {
-  return instance && instance.count(toggleName, enabled);
+  instance?.count(toggleName, enabled);
 }
 
 export function countVariant(toggleName: string, variantName: string) {
-  return instance && instance.countVariant(toggleName, variantName);
+  instance?.countVariant(toggleName, variantName);
 }
 
 export async function flushMetrics(): Promise<void> {
-  return instance && instance.flushMetrics();
+  instance?.flushMetrics();
 }
 
 export async function destroyWithFlush(): Promise<void> {
-  return instance && instance.destroyWithFlush();
+  instance?.destroyWithFlush();
 }
