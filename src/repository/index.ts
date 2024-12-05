@@ -79,7 +79,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
 
   private readonly namePrefix?: string;
 
-  private readonly tags?: Array<TagFilter>;
+  private readonly tags?: TagFilter[];
 
   private bootstrapProvider: BootstrapProvider;
 
