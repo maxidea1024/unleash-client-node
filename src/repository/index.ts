@@ -1,14 +1,18 @@
 import { EventEmitter } from 'events';
-import { ClientFeaturesResponse, EnhancedFeatureInterface, FeatureInterface } from '../feature';
+import type {
+  ClientFeaturesResponse,
+  EnhancedFeatureInterface,
+  FeatureInterface,
+} from '../feature';
 import { get } from '../request';
-import { CustomHeaders, CustomHeadersFunction } from '../headers';
+import type { CustomHeaders, CustomHeadersFunction } from '../headers';
 import getUrl from '../url-utils';
-import { HttpOptions } from '../http-options';
-import { TagFilter } from '../tags';
-import { BootstrapProvider } from './bootstrap-provider';
-import { StorageProvider } from './storage-provider';
+import type { HttpOptions } from '../http-options';
+import type { TagFilter } from '../tags';
+import type { BootstrapProvider } from './bootstrap-provider';
+import type { StorageProvider } from './storage-provider';
 import { UnleashEvents } from '../events';
-import {
+import type {
   EnhancedStrategyTransportInterface,
   Segment,
   StrategyTransportInterface,
@@ -230,10 +234,10 @@ export default class Repository extends EventEmitter implements EventEmitter {
       if (content && this.notEmpty(content)) {
         await this.save(content, false);
       }
-    } catch (err: any) {
+    } catch (error: any) {
       this.emit(
         UnleashEvents.Warn,
-        `Unleash SDK was unable to load bootstrap. Message: ${err.message}`,
+        `Unleash SDK was unable to load bootstrap. Message: ${error.message}`,
       );
     }
   }
@@ -289,7 +293,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
   // We got a status code we know what to do with, so will log correct message
   // and return the new interval.
   private recoverableError(url: string, statusCode: number): number {
-    let nextFetch = this.backoff();
+    const nextFetch = this.backoff();
     if (statusCode === 429) {
       this.emit(
         UnleashEvents.Warn,
@@ -340,6 +344,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
     }
     let nextFetch = this.refreshInterval;
     try {
+      // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
       let mergedTags;
       if (this.tags) {
         mergedTags = this.mergeTagsToStringArray(this.tags);
@@ -391,7 +396,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
     }
   }
 
-  mergeTagsToStringArray(tags: Array<TagFilter>): Array<string> {
+  mergeTagsToStringArray(tags: Array<TagFilter>): string[] {
     return tags.map((tag) => `${tag.name}:${tag.value}`);
   }
 
