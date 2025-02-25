@@ -12,7 +12,7 @@ export default class RemoteAddressStrategy extends Strategy {
       return false;
     }
 
-    return parameters.IPs.split(/\s*,\s*/).some((range: string): Boolean => {
+    return parameters.IPs.split(/\s*,\s*/).some((range: string): boolean => {
       if (range === context.remoteAddress) {
         return true;
       }

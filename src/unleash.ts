@@ -200,6 +200,7 @@ export class Unleash extends EventEmitter {
   /**
    * Will only give you an instance the first time you call the method,
    * and then return the same instance.
+   *
    * @param config The Unleash Config.
    * @returns the Unleash instance
    */
@@ -305,7 +306,7 @@ export class Unleash extends EventEmitter {
       variant =
         typeof fallbackVariant !== 'undefined'
           ? { ...fallbackVariant, feature_enabled: false, featureEnabled: false }
-          : { ...defaultVariant, featureEnabled: defaultVariant.feature_enabled! };
+          : { ...defaultVariant, featureEnabled: defaultVariant.feature_enabled || false };
 
       this.emit(
         UnleashEvents.Warn,

@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { promises } from 'fs';
 import { safeName } from '../helpers';
-import { StorageProvider } from './storage-provider';
+import type { StorageProvider } from './storage-provider';
 
 const { writeFile, readFile } = promises;
 
@@ -12,6 +12,7 @@ export default class FileStorageProvider<T> implements StorageProvider<T> {
     if (!backupPath) {
       throw new Error('backup Path is required');
     }
+
     this.backupPath = backupPath;
   }
 

@@ -59,9 +59,7 @@ const InOperator = (constraint: Constraint, context: Context) => {
   const field = constraint.contextName;
   const values = cleanValues(constraint.values);
   const contextValue = resolveContextValue(context, field);
-
   const isIn = values.some((val) => val === contextValue);
-
   return constraint.operator === Operator.IN ? isIn : !isIn;
 };
 
@@ -81,9 +79,13 @@ const StringOperator = (constraint: Constraint, context: Context) => {
 
   if (operator === Operator.STR_STARTS_WITH) {
     return values.some((val) => contextValue?.startsWith(val));
-  } else if (operator === Operator.STR_ENDS_WITH) {
+  }
+
+  if (operator === Operator.STR_ENDS_WITH) {
     return values.some((val) => contextValue?.endsWith(val));
-  } else if (operator === Operator.STR_CONTAINS) {
+  }
+
+  if (operator === Operator.STR_CONTAINS) {
     return values.some((val) => contextValue?.includes(val));
   }
 
@@ -105,9 +107,13 @@ const SemverOperator = (constraint: Constraint, context: Context) => {
 
     if (operator === Operator.SEMVER_EQ) {
       return semverEq(contextValue, value);
-    } else if (operator === Operator.SEMVER_LT) {
+    }
+
+    if (operator === Operator.SEMVER_LT) {
       return semverLt(contextValue, value);
-    } else if (operator === Operator.SEMVER_GT) {
+    }
+
+    if (operator === Operator.SEMVER_GT) {
       return semverGt(contextValue, value);
     }
   } catch (e: unknown) {
@@ -125,6 +131,7 @@ const DateOperator = (constraint: Constraint, context: Context) => {
   if (operator === Operator.DATE_AFTER) {
     return currentTime > value;
   }
+
   if (operator === Operator.DATE_BEFORE) {
     return currentTime < value;
   }
@@ -142,19 +149,20 @@ const NumberOperator = (constraint: Constraint, context: Context) => {
     return false;
   }
 
-  if (operator === Operator.NUM_EQ) {
-    return contextValue === value;
-  } else if (operator === Operator.NUM_GT) {
-    return contextValue > value;
-  } else if (operator === Operator.NUM_GTE) {
-    return contextValue >= value;
-  } else if (operator === Operator.NUM_LT) {
-    return contextValue < value;
-  } else if (operator === Operator.NUM_LTE) {
-    return contextValue <= value;
+  switch (operator) {
+    case Operator.NUM_EQ:
+      return contextValue === value;
+    case Operator.NUM_GT:
+      return contextValue > value;
+    case Operator.NUM_GTE:
+      return contextValue >= value;
+    case Operator.NUM_LT:
+      return contextValue < value;
+    case Operator.NUM_LTE:
+      return contextValue <= value;
+    default:
+      return false;
   }
-
-  return false;
 };
 
 const operators = new Map<Operator, OperatorImpl>();

@@ -234,10 +234,12 @@ export default class Repository extends EventEmitter implements EventEmitter {
       if (content && this.notEmpty(content)) {
         await this.save(content, false);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const e = error as Error;
+
       this.emit(
         UnleashEvents.Warn,
-        `Unleash SDK was unable to load bootstrap. Message: ${error.message}`,
+        `Unleash SDK was unable to load bootstrap. Message: ${e.message}`,
       );
     }
   }
@@ -245,6 +247,8 @@ export default class Repository extends EventEmitter implements EventEmitter {
   private convertToMap(features: FeatureInterface[]): FeatureToggleData {
     const obj = features.reduce(
       (o: { [s: string]: FeatureInterface }, feature: FeatureInterface) => {
+        // FIXME: 실제 동작에 문제가 없는지 여부를 체크해야함.
+        // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
         const a = { ...o };
         this.validateFeature(feature);
         a[feature.name] = feature;
@@ -342,6 +346,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
     if (this.stopped || !(this.refreshInterval > 0)) {
       return;
     }
+
     let nextFetch = this.refreshInterval;
     try {
       // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
@@ -377,7 +382,7 @@ export default class Repository extends EventEmitter implements EventEmitter {
             this.etag = undefined;
           }
           await this.save(data, true);
-        } catch (err) {
+        } catch (err: unknown) {
           this.emit(UnleashEvents.Error, err);
         }
       } else {
@@ -401,10 +406,16 @@ export default class Repository extends EventEmitter implements EventEmitter {
   }
 
   stop() {
+    if (this.stopped) {
+      return;
+    }
     this.stopped = true;
+
     if (this.timer) {
       clearTimeout(this.timer);
+      this.timer = undefined;
     }
+
     this.removeAllListeners();
   }
 

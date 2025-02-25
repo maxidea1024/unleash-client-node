@@ -293,7 +293,7 @@ export default class Metrics extends EventEmitter {
     this.startTimer();
   }
 
-  assertBucket(name: string): void {
+  ensureBucket(name: string): void {
     if (this.disabled) {
       return;
     }
@@ -332,12 +332,12 @@ export default class Metrics extends EventEmitter {
       return;
     }
 
-    this.assertBucket(name);
+    this.ensureBucket(name);
     this.bucket.toggles[name][enabled ? 'yes' : 'no'] += inc;
   }
 
   private increaseVariantCounter(name: string, variantName: string, inc = 1): void {
-    this.assertBucket(name);
+    this.ensureBucket(name);
 
     if (this.bucket.toggles[name].variants[variantName]) {
       this.bucket.toggles[name].variants[variantName] += inc;

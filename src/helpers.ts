@@ -45,7 +45,7 @@ export function generateInstanceId(instanceId?: string): string {
   return `${prefix}-${hostname()}`;
 }
 
-export function generateHashOfConfig(o: Object): string {
+export function generateHashOfConfig(o: object): string {
   const oAsString = JSON.stringify(o);
   return murmurHash3.x86.hash128(oAsString);
 }
